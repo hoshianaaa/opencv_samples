@@ -1,3 +1,4 @@
+//(引用元):https://docs.opencv.org/4.x/d2/d2c/tutorial_sobel_derivatives.html
 
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"
