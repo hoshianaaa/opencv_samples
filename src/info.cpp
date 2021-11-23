@@ -18,6 +18,8 @@ int main(int argc, const char * argv[])
 
     // Mat::type()の値 https://koshinran.hateblo.jp/entry/2017/10/30/200250
 
+    mat_infos(img);
+
     imshow("img", img );
     waitKey(0);
 

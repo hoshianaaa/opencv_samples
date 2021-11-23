@@ -20,8 +20,12 @@ int main(int argc, const char * argv[])
     imshow("img", img );
 
     Mat gx,gy;
-    Sobel(img, gx, CV_16S, 1, 0);
-    Sobel(img, gy, CV_16S, 0, 1);
+    Sobel(img, gx, CV_16S, 1, 0, 3, 1);
+    Sobel(img, gy, CV_16S, 0, 1, 3, 1);
+
+    //絶対値を計算し符号なし8-bitへ変換(参考: https://stackoverflow.com/questions/17815690/compute-absolute-values-of-x-and-y-derivatives-using-opencv)
+    //convertScaleAbs(gx, gx);
+    //convertScaleAbs(gy, gy);
 
     mat_infos(gx);
 
