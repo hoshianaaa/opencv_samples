@@ -17,6 +17,11 @@ target_link_libraries(mat
   ${OpenCV_LIBRARIES}
 )
 
+add_executable(info src/info.cpp)
+target_link_libraries(info
+  ${OpenCV_LIBRARIES}
+)
+
 add_executable(sobel src/sobel.cpp)
 target_link_libraries(sobel
   ${OpenCV_LIBRARIES}
