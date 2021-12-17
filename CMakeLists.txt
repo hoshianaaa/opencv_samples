@@ -21,3 +21,13 @@ add_executable(sobel src/sobel.cpp)
 target_link_libraries(sobel
   ${OpenCV_LIBRARIES}
 )
+
+add_executable(sobel1 src/sobel1.cpp)
+target_link_libraries(sobel1
+  ${OpenCV_LIBRARIES}
+)
+
+add_executable(canny src/canny.cpp)
+target_link_libraries(canny
+  ${OpenCV_LIBRARIES}
+)
