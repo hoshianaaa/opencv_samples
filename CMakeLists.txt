@@ -36,3 +36,10 @@ add_executable(canny src/canny.cpp)
 target_link_libraries(canny
   ${OpenCV_LIBRARIES}
 )
+
+add_executable(tempmatch src/tempmatch.cpp)
+target_link_libraries(tempmatch
+  ${OpenCV_LIBRARIES}
+)
+
+
