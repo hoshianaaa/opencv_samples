@@ -198,17 +198,6 @@ int main(int argc, const char * argv[])
         }
     }
 
-    ret.at<cv::Vec3b>((int)0,(int)0) = cv::Vec3b(0,255,0);
-    ret.at<cv::Vec3b>((int)10,(int)0) = cv::Vec3b(0,255,0);
-    ret.at<cv::Vec3b>((int)15,(int)0) = cv::Vec3b(0,255,0);
-    //std::cout << img.at<uchar>(i,j) << std::endl;
-    std::cout << "1:" << int(timg.at<uchar>(0,0)) << std::endl;
-    std::cout << "10:" << int(timg.at<uchar>(10,0)) << std::endl;
-    std::cout << "11:" << int(timg.at<uchar>(11,0)) << std::endl;
-    std::cout << "12:" << int(timg.at<uchar>(12,0)) << std::endl;
-    std::cout << "13:" << int(timg.at<uchar>(13,0)) << std::endl;
-    std::cout << "14:" << int(timg.at<uchar>(14,0)) << std::endl;
-    std::cout << "15:" << int(timg.at<uchar>(15,0)) << std::endl;
     cv::Mat frame3 = write_points( coordinates, noOfCordinates, timg, 0, 0, 0);
 
     double center_x = double(x_sum) / noOfCordinates;
@@ -217,7 +206,7 @@ int main(int argc, const char * argv[])
     Mat d_simg = simg.clone();
     Mat d_timg = timg.clone();
 
-    int pyrdown_num = 0;
+    int pyrdown_num = 1;
 
     for(int i=0;i<pyrdown_num;i++)
     {
@@ -240,7 +229,7 @@ int main(int argc, const char * argv[])
         unsigned char *src = d_timg.ptr<unsigned char>(j);
         for (int i = 0; i < width2; i++)
         {
-            if(src[i] > 100){
+            if(src[i] != 0){
               coordinates2[noOfCordinates2].x = (double)i - pyrdown_center_x;
               coordinates2[noOfCordinates2].y = (double)j - pyrdown_center_y;
               noOfCordinates2++;
@@ -249,14 +238,14 @@ int main(int argc, const char * argv[])
     }
 
     cv::Point max_pos;
-    double max_degree;
+    double max_degree=0;
     double match_ratio;
 
     //void geomatch(cv::Point2f temp_points[],int temp_points_num, cv::Mat search_img,cv::Point& result_pos, double& result_angle, double d_angle = 0.1, int angle_min = -1, int angle_max = -1, int x_min = -1, int x_max = -1, int y_min = -1, int y_max = -1)
 
-//    geomatch(coordinates2, noOfCordinates2, d_simg, max_pos, max_degree , match_ratio, 2);
+    geomatch(coordinates2, noOfCordinates2, d_simg, max_pos, max_degree , match_ratio, 2);
 
-//    cv::Mat frame = write_points( coordinates2, noOfCordinates2, d_simg, max_pos.x, max_pos.y, max_degree);
+    cv::Mat frame = write_points( coordinates2, noOfCordinates2, d_simg, max_pos.x, max_pos.y, max_degree);
     cv::Mat frame2 = write_points( coordinates2, noOfCordinates2, d_timg, pyrdown_center_x, pyrdown_center_y, 0);
 
     
@@ -266,10 +255,8 @@ int main(int argc, const char * argv[])
     imshow("down s image", d_simg );
     imshow("down t image", d_timg );
 
-//    imshow("result", frame );
+    imshow("result", frame );
     imshow("result2", frame2 );
-    imshow("result3", frame3 );
-    imshow("result4", ret );
 
     waitKey(0);
 
