@@ -80,6 +80,7 @@ void geomatch(cv::Point2f temp_points[],int temp_points_num, cv::Mat search_img,
 */
   std::cout << "calc cost:" << c1 * c2 * c3 * c4 / 1000000 << std::endl;
 
+  int n = 0;
   while (deg <= deg_max_limit)
   {
 
@@ -101,6 +102,15 @@ void geomatch(cv::Point2f temp_points[],int temp_points_num, cv::Mat search_img,
               if(s_img.at<unsigned char>(y,x) == 255)counter++;
             if ((temp_points_num - k) <= (max_count - counter))break;
            }
+           double ratio = 0;
+           ratio = (double)counter / temp_points_num;
+
+           if (ratio > 0.8)
+           {
+             std::cout << n <<  " ok!" << std::endl;
+             n++;
+           }
+
            if (counter > max_count)
            {
              max_count = counter;
