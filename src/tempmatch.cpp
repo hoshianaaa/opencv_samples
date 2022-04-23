@@ -158,6 +158,8 @@ int main(int argc, const char * argv[])
 {
     Mat simg = imread( "images/tube.png" );
     Mat timg = imread( "images/tube_temp.png" );
+    cv::cvtColor(timg, timg, cv::COLOR_RGB2GRAY);
+    cv::cvtColor(simg, simg, cv::COLOR_RGB2GRAY);
     
     int x_sum = 0;
     int y_sum = 0;
@@ -166,8 +168,19 @@ int main(int argc, const char * argv[])
     int height = timg.rows;
 
     int noOfCordinates = 0;
-    cv::Point *coordinates;
-    coordinates =  new cv::Point[width * height];
+    cv::Point2f *coordinates;
+    coordinates =  new cv::Point2f[width * height];
+
+    cv::Mat ret;
+    if (timg.type()==CV_8UC1){
+      cv::cvtColor(timg, ret, cv::COLOR_GRAY2RGB);
+    }
+    else{
+      ret = timg.clone();
+    }
+
+    std::cout << "t:" << timg.cols << std::endl;
+    std::cout << "t2:" << ret.cols << std::endl;
 
     for (int j = 0; j < timg.rows; j++)
     {
@@ -175,8 +188,9 @@ int main(int argc, const char * argv[])
         for (int i = 0; i < timg.cols; i++)
         {
             if(src[i] == 255){
-              coordinates[noOfCordinates].x = i;
-              coordinates[noOfCordinates].y = j;
+              coordinates[noOfCordinates].x = (double)i;
+              coordinates[noOfCordinates].y = (double)j;
+              ret.at<cv::Vec3b>((int)j,(int)i) = cv::Vec3b(0,255,0);
               x_sum += i;
               y_sum += j;
               noOfCordinates++;
@@ -184,13 +198,26 @@ int main(int argc, const char * argv[])
         }
     }
 
+    ret.at<cv::Vec3b>((int)0,(int)0) = cv::Vec3b(0,255,0);
+    ret.at<cv::Vec3b>((int)10,(int)0) = cv::Vec3b(0,255,0);
+    ret.at<cv::Vec3b>((int)15,(int)0) = cv::Vec3b(0,255,0);
+    //std::cout << img.at<uchar>(i,j) << std::endl;
+    std::cout << "1:" << int(timg.at<uchar>(0,0)) << std::endl;
+    std::cout << "10:" << int(timg.at<uchar>(10,0)) << std::endl;
+    std::cout << "11:" << int(timg.at<uchar>(11,0)) << std::endl;
+    std::cout << "12:" << int(timg.at<uchar>(12,0)) << std::endl;
+    std::cout << "13:" << int(timg.at<uchar>(13,0)) << std::endl;
+    std::cout << "14:" << int(timg.at<uchar>(14,0)) << std::endl;
+    std::cout << "15:" << int(timg.at<uchar>(15,0)) << std::endl;
+    cv::Mat frame3 = write_points( coordinates, noOfCordinates, timg, 0, 0, 0);
+
     double center_x = double(x_sum) / noOfCordinates;
     double center_y = double(y_sum) / noOfCordinates;
 
     Mat d_simg = simg.clone();
     Mat d_timg = timg.clone();
 
-    int pyrdown_num = 2;
+    int pyrdown_num = 0;
 
     for(int i=0;i<pyrdown_num;i++)
     {
@@ -213,7 +240,7 @@ int main(int argc, const char * argv[])
         unsigned char *src = d_timg.ptr<unsigned char>(j);
         for (int i = 0; i < width2; i++)
         {
-            if(src[i] == 255){
+            if(src[i] > 100){
               coordinates2[noOfCordinates2].x = (double)i - pyrdown_center_x;
               coordinates2[noOfCordinates2].y = (double)j - pyrdown_center_y;
               noOfCordinates2++;
@@ -227,9 +254,10 @@ int main(int argc, const char * argv[])
 
     //void geomatch(cv::Point2f temp_points[],int temp_points_num, cv::Mat search_img,cv::Point& result_pos, double& result_angle, double d_angle = 0.1, int angle_min = -1, int angle_max = -1, int x_min = -1, int x_max = -1, int y_min = -1, int y_max = -1)
 
-    geomatch(coordinates2, noOfCordinates2, d_simg, max_pos, max_degree , match_ratio, 2);
+//    geomatch(coordinates2, noOfCordinates2, d_simg, max_pos, max_degree , match_ratio, 2);
 
-    cv::Mat frame = write_points( coordinates2, noOfCordinates2, d_simg, max_pos.x, max_pos.y, max_degree);
+//    cv::Mat frame = write_points( coordinates2, noOfCordinates2, d_simg, max_pos.x, max_pos.y, max_degree);
+    cv::Mat frame2 = write_points( coordinates2, noOfCordinates2, d_timg, pyrdown_center_x, pyrdown_center_y, 0);
 
     
     imshow("s image", simg );
@@ -238,7 +266,10 @@ int main(int argc, const char * argv[])
     imshow("down s image", d_simg );
     imshow("down t image", d_timg );
 
-    imshow("result", frame );
+//    imshow("result", frame );
+    imshow("result2", frame2 );
+    imshow("result3", frame3 );
+    imshow("result4", ret );
 
     waitKey(0);
 
