@@ -48,6 +48,13 @@ int main(int argc, const char * argv[])
 
     double pyrdown_center_x = center_x / std::pow(2,pyrdown_num);
     double pyrdown_center_y = center_y / std::pow(2,pyrdown_num);
+
+    int width2 = d_timg.cols;
+    int height2 = d_timg.rows;
+
+    int noOfCordinates2 = 0;
+    cv::Point *coordinates2;
+    coordinates2 =  new cv::Point[width2 * height2];
     
     imshow("s image", simg );
     imshow("t image", timg );
