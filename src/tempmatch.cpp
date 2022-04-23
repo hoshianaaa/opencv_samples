@@ -55,6 +55,24 @@ int main(int argc, const char * argv[])
     int noOfCordinates2 = 0;
     cv::Point *coordinates2;
     coordinates2 =  new cv::Point[width2 * height2];
+
+    int x_sum2 = 0;
+    int y_sum2 = 0;
+
+    for (int j = 0; j < height2; j++)
+    {
+        unsigned char *src = d_timg.ptr<unsigned char>(j);
+        for (int i = 0; i < width2; i++)
+        {
+            if(src[i] == 255){
+              coordinates2[noOfCordinates2].x = i;
+              coordinates2[noOfCordinates2].y = j;
+              x_sum2 += i;
+              y_sum2 += j;
+              noOfCordinates2++;
+            } 
+        }
+    }
     
     imshow("s image", simg );
     imshow("t image", timg );
