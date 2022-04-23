@@ -229,7 +229,7 @@ int main(int argc, const char * argv[])
         unsigned char *src = d_timg.ptr<unsigned char>(j);
         for (int i = 0; i < width2; i++)
         {
-            if(src[i] != 0){
+            if(src[i] > 100){
               coordinates2[noOfCordinates2].x = (double)i - pyrdown_center_x;
               coordinates2[noOfCordinates2].y = (double)j - pyrdown_center_y;
               noOfCordinates2++;
@@ -247,7 +247,6 @@ int main(int argc, const char * argv[])
 
     cv::Mat frame = write_points( coordinates2, noOfCordinates2, d_simg, max_pos.x, max_pos.y, max_degree);
     cv::Mat frame2 = write_points( coordinates2, noOfCordinates2, d_timg, pyrdown_center_x, pyrdown_center_y, 0);
-
     
     imshow("s image", simg );
     imshow("t image", timg );
